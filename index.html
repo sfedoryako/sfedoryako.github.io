@@ -229,117 +229,6 @@
 
     .final-cta p { color: #c7d3eb; }
 
-    .modal {
-      position: fixed;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 40;
-    }
-
-    .modal.open {
-      display: flex;
-    }
-
-    .modal__overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(10, 18, 31, 0.62);
-    }
-
-    .modal__dialog {
-      position: relative;
-      width: min(560px, 92vw);
-      background: var(--surface);
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      box-shadow: 0 30px 60px rgba(5, 10, 18, 0.35);
-      padding: 20px;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-
-    .modal__close {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      border: none;
-      background: #eef2fb;
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 1.2rem;
-      line-height: 1;
-      color: #2f3f5f;
-    }
-
-    .form-group {
-      margin-bottom: 12px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
-
-    .form-group input,
-    .form-group textarea {
-      width: 100%;
-      border: 1px solid #c8d2e3;
-      border-radius: 10px;
-      padding: 10px 12px;
-      font: inherit;
-      color: var(--text);
-      background: #fff;
-    }
-
-    .form-group textarea {
-      min-height: 90px;
-      resize: vertical;
-    }
-
-    .form-group input.invalid,
-    .form-group textarea.invalid,
-    .checkbox.invalid {
-      border-color: var(--danger);
-      outline: 1px solid color-mix(in srgb, var(--danger), transparent 70%);
-    }
-
-    .checkbox {
-      border: 1px solid transparent;
-      border-radius: 8px;
-      padding: 6px;
-      margin: 8px 0 12px;
-    }
-
-    .checkbox label {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      color: #4a5b77;
-      font-size: 0.92rem;
-    }
-
-    .error-text {
-      min-height: 20px;
-      color: var(--danger);
-      font-size: 0.9rem;
-      font-weight: 500;
-      margin: 0 0 8px;
-    }
-
-    .success-text {
-      min-height: 20px;
-      color: var(--success);
-      font-size: 0.95rem;
-      font-weight: 600;
-      margin: 8px 0 0;
-    }
-
     @media (min-width: 720px) {
       .benefits { grid-template-columns: repeat(3, 1fr); }
       .grid--3 { grid-template-columns: repeat(3, 1fr); }
@@ -361,7 +250,7 @@
           <li>Снижение зависимости от срочных выездов.</li>
           <li>Понятный алгоритм действий для вашей команды.</li>
         </ul>
-        <button class="cta-btn" type="button" data-open-modal>Оставить запрос</button>
+        <a class="cta-btn" href="https://example.com/request" target="_blank" rel="noopener">Оставить запрос</a>
       </div>
     </div>
   </section>
@@ -497,124 +386,13 @@
       <div class="final-cta">
         <h2>Подключите команду к закрытому чату и сократите потери уже в ближайший месяц</h2>
         <p>Оставьте заявку, чтобы получить условия доступа и план внедрения под ваши задачи.</p>
-        <button class="cta-btn" type="button" data-open-modal>Оставить запрос</button>
+        <a class="cta-btn" href="https://example.com/request" target="_blank" rel="noopener">Оставить запрос</a>
       </div>
     </div>
   </section>
 </main>
 
-<div class="modal" id="requestModal" aria-hidden="true">
-  <div class="modal__overlay" data-close-modal></div>
-  <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <button class="modal__close" type="button" aria-label="Закрыть" data-close-modal>&times;</button>
-    <h2 id="modalTitle">Оставить запрос</h2>
-    <p>Заполните форму — свяжемся с вами и подберём формат подключения.</p>
-    <form id="requestForm" novalidate>
-      <div class="form-group">
-        <label for="name">Имя *</label>
-        <input id="name" name="name" type="text" autocomplete="name" placeholder="Иван Петров">
-      </div>
-      <div class="form-group">
-        <label for="company">Компания</label>
-        <input id="company" name="company" type="text" autocomplete="organization" placeholder="ООО «Пример»">
-      </div>
-      <div class="form-group">
-        <label for="contact">Телефон или email *</label>
-        <input id="contact" name="contact" type="text" autocomplete="email" placeholder="+7 (...) или mail@company.ru">
-      </div>
-      <div class="form-group">
-        <label for="comment">Комментарий</label>
-        <textarea id="comment" name="comment" placeholder="Кратко опишите задачу"></textarea>
-      </div>
-      <div class="checkbox" id="consentWrap">
-        <label>
-          <input id="consent" name="consent" type="checkbox">
-          <span>Согласен(а) на обработку персональных данных.</span>
-        </label>
-      </div>
-      <p class="error-text" id="formError"></p>
-      <button class="cta-btn" type="submit">Оставить запрос</button>
-      <p class="success-text" id="formSuccess" aria-live="polite"></p>
-    </form>
-  </div>
-</div>
-
 <script>
-  const modal = document.getElementById('requestModal');
-  const openButtons = document.querySelectorAll('[data-open-modal]');
-  const closeButtons = document.querySelectorAll('[data-close-modal]');
-  const form = document.getElementById('requestForm');
-  const nameInput = document.getElementById('name');
-  const contactInput = document.getElementById('contact');
-  const consent = document.getElementById('consent');
-  const consentWrap = document.getElementById('consentWrap');
-  const formError = document.getElementById('formError');
-  const formSuccess = document.getElementById('formSuccess');
-
-  const clearValidation = () => {
-    [nameInput, contactInput].forEach((field) => field.classList.remove('invalid'));
-    consentWrap.classList.remove('invalid');
-    formError.textContent = '';
-  };
-
-  const openModal = () => {
-    modal.classList.add('open');
-    modal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-    clearValidation();
-    formSuccess.textContent = '';
-    nameInput.focus();
-  };
-
-  const closeModal = () => {
-    modal.classList.remove('open');
-    modal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  };
-
-  openButtons.forEach((button) => button.addEventListener('click', openModal));
-  closeButtons.forEach((button) => button.addEventListener('click', closeModal));
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && modal.classList.contains('open')) {
-      closeModal();
-    }
-  });
-
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    clearValidation();
-    formSuccess.textContent = '';
-
-    const nameValue = nameInput.value.trim();
-    const contactValue = contactInput.value.trim();
-
-    const errors = [];
-
-    if (!nameValue) {
-      nameInput.classList.add('invalid');
-      errors.push('Укажите имя.');
-    }
-
-    if (!contactValue) {
-      contactInput.classList.add('invalid');
-      errors.push('Укажите телефон или email.');
-    }
-
-    if (!consent.checked) {
-      consentWrap.classList.add('invalid');
-      errors.push('Подтвердите согласие на обработку данных.');
-    }
-
-    if (errors.length) {
-      formError.textContent = errors.join(' ');
-      return;
-    }
-
-    form.reset();
-    formSuccess.textContent = 'Запрос отправлен';
-  });
-
   document.querySelectorAll('.faq-question').forEach((button) => {
     button.addEventListener('click', () => {
       const item = button.closest('.faq-item');
