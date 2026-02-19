@@ -51,6 +51,12 @@ p { margin: 0 0 12px; max-width: 76ch; }
   background: rgba(255,255,255,.97);
   border-bottom: 1px solid #d7ead7;
 }
+
+.site-header.is-shrink {
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 20px rgba(38,66,38,.12);
+}
+
 .site-header::before {
   content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px;
   background: linear-gradient(90deg,var(--green),var(--green-dark));
