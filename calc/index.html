@@ -1,53 +1,26 @@
 <!doctype html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Калькулятор окупаемости внедрения систем точного земледелия.">
-  <title>Экономический расчёт — АгроКонтур</title>
-  <link rel="stylesheet" href="/css/main.css">
-</head>
-<body data-page="calc">
-<div data-include="header"></div>
-<main>
-  <section class="story">
-    <div class="container">
-      <h1 class="section-title">Экономический расчёт окупаемости</h1>
-      <p class="lead">Введите базовые параметры, получите оценку эффекта и отправьте заявку на детализированный расчёт для вашего хозяйства.</p>
-
-      <article class="card">
-        <form id="payback-form" class="form" method="POST" action="https://formspree.io/f/xzzvvrav">
-          <label>Площадь, га
-            <input type="number" name="area" min="100" step="10" placeholder="Например, 4500" required>
-          </label>
-          <label>Культура
-            <select name="crop" required>
-              <option value="">Выберите культуру</option>
-              <option value="wheat">Пшеница</option>
-              <option value="corn">Кукуруза</option>
-              <option value="sunflower">Подсолнечник</option>
-              <option value="rapeseed">Рапс</option>
-            </select>
-          </label>
-          <label>Ширина захвата, м
-            <input type="number" name="capture" min="3" max="24" step="0.5" placeholder="Например, 12" required>
-          </label>
-          <button type="submit">Рассчитать и отправить</button>
-          <p class="form-note">Форма отправляется через Formspree. При подключении backend замените значение <code>action</code>.</p>
-        </form>
-
-        <div class="output">
-          <p><strong>Оценочная экономия:</strong> <span id="economy-output">—</span></p>
-          <p><strong>Срок окупаемости:</strong> <span id="payback-output">—</span></p>
-          <p class="notice" id="calc-send-status"></p>
-        </div>
-      </article>
-    </div>
-  </section>
-</main>
-<div data-include="footer"></div>
-<script src="/js/layout.js" defer></script>
-<script src="/js/calc.js" defer></script>
-<script src="/js/animations.js" defer></script>
-</body>
-</html>
+<html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Калькулятор ROI для систем точного земледелия."><title>Экономический расчёт — АгроКонтур</title><link rel="stylesheet" href="/css/main.css"></head>
+<body data-page="calc"><div data-include="header"></div><main>
+<section class="story"><div class="container"><h1>Калькулятор ROI внедрения</h1><p class="lead">Оцените эффект по выбранной операции и получите бизнес-расчёт для принятия решения.</p>
+<article class="card">
+<!-- ВСТАВЬТЕ СЮДА СВОЙ FORMSPREE ENDPOINT: https://formspree.io/f/XXXXXXXX -->
+<form id="payback-form" class="form" data-ajax-form="true" method="POST" action="https://formspree.io/f/XXXXXXXX">
+<label>Площадь, га <span class="form-hint">Минимум 100 га</span><input type="number" name="area" min="100" required></label>
+<label>Культура <select name="crop" required><option value="">Выберите</option><option value="wheat">Пшеница</option><option value="corn">Кукуруза</option><option value="sunflower">Подсолнечник</option><option value="rapeseed">Рапс</option></select></label>
+<label>Операция <select name="operation" required><option value="">Выберите</option><option value="sowing">Посев</option><option value="fertilizing">Внесение удобрений</option><option value="spraying">Опрыскивание</option></select></label>
+<label>Ширина захвата, м <span class="form-hint">Например: 12</span><input type="number" name="capture" min="3" max="36" step="0.5" required></label>
+<input type="hidden" name="calc_total"><input type="hidden" name="calc_payback"><input type="hidden" name="calc_roi">
+<button class="btn-primary" type="submit">Рассчитать ROI</button>
+<p class="form-status"></p>
+</form>
+<div class="calc-result"><h3>Результат</h3>
+<p>Экономия СЗР: <strong id="out-chem">0 ₽</strong></p>
+<p>Экономия удобрений: <strong id="out-fert">0 ₽</strong></p>
+<p>Экономия ГСМ: <strong id="out-fuel">0 ₽</strong></p>
+<p>Итого экономия: <strong id="out-total">0 ₽</strong></p>
+<p>Окупаемость: <strong id="out-payback">—</strong></p>
+<p>ROI: <strong id="out-roi">—</strong></p>
+</div>
+<p><a class="btn-secondary" href="/contact/">Получить детализированный расчёт</a></p>
+</article></div></section>
+</main><div data-include="footer"></div><script src="/js/main.js" defer></script></body></html>

@@ -1,43 +1,23 @@
 <!doctype html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Контакты АгроКонтур и форма запроса на внедрение систем точного земледелия.">
-  <title>Контакты — АгроКонтур</title>
-  <link rel="stylesheet" href="/css/main.css">
-</head>
-<body data-page="contact">
-<div data-include="header"></div>
-<main>
-  <section class="story">
-    <div class="container">
-      <h1 class="section-title">Свяжитесь с проектной командой</h1>
-      <p class="lead">На первой встрече определим ключевые потери, оценим потенциал и подготовим дорожную карту внедрения.</p>
-
-      <div class="card-grid">
-        <article class="card"><h2>Телефон</h2><p><a href="tel:+78005553535">8 (800) 555-35-35</a></p></article>
-        <article class="card"><h2>E-mail</h2><p><a href="mailto:info@agrocontur.ru">info@agrocontur.ru</a></p></article>
-        <article class="card"><h2>Офис</h2><p>Воронеж, ул. Технологическая, 14</p></article>
-      </div>
-
-      <article class="card">
-        <h2>Запрос на расчёт</h2>
-        <form class="form" method="POST" action="https://formspree.io/f/xzzvvrav">
-          <label>Ваше имя<input name="name" type="text" placeholder="Иван Петров" required></label>
-          <label>Компания<input name="company" type="text" placeholder="ООО «АгроЮг»" required></label>
-          <label>Телефон<input name="phone" type="tel" placeholder="+7 (900) 000-00-00" required></label>
-          <label>Площадь хозяйства, га<input name="area" type="number" placeholder="6200" required></label>
-          <label>Комментарий<textarea name="message" rows="4" placeholder="Какие задачи хотите решить в первую очередь"></textarea></label>
-          <button type="submit">Отправить запрос</button>
-          <p class="form-note">Форма отправляется через Formspree и легко переключается на ваш backend заменой значения <code>action</code>.</p>
-        </form>
-      </article>
-    </div>
-  </section>
-</main>
-<div data-include="footer"></div>
-<script src="/js/layout.js" defer></script>
-<script src="/js/animations.js" defer></script>
-</body>
-</html>
+<html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Контакты и запрос внедрения."><title>Контакты — АгроКонтур</title><link rel="stylesheet" href="/css/main.css"></head>
+<body data-page="contact"><div data-include="header"></div><main>
+<section class="story"><div class="container"><h1>Свяжитесь с проектной командой</h1><p class="lead">За 30 минут определим приоритетные точки потерь и формат запуска в вашем хозяйстве.</p>
+<div class="card-grid">
+<article class="card"><h3>Телефон</h3><p><a class="link-inline" href="tel:+78005553535">8 (800) 555-35-35</a></p></article>
+<article class="card"><h3>E-mail</h3><p><a class="link-inline" href="mailto:info@agrocontur.ru">info@agrocontur.ru</a></p></article>
+<article class="card"><h3>Офис</h3><p>Воронеж, ул. Технологическая, 14</p></article>
+</div>
+<article class="card">
+<h2>Запрос на расчёт</h2>
+<!-- ВСТАВЬТЕ СЮДА СВОЙ FORMSPREE ENDPOINT: https://formspree.io/f/XXXXXXXX -->
+<form class="form" data-ajax-form="true" method="POST" action="https://formspree.io/f/XXXXXXXX">
+<label>Имя<input name="name" required></label>
+<label>Компания<input name="company" required></label>
+<label>Телефон<input name="phone" required></label>
+<label>Площадь, га<input type="number" name="area" required></label>
+<label>Комментарий<textarea name="message" rows="4"></textarea></label>
+<button class="btn-primary" type="submit">Отправить запрос</button>
+<p class="form-status"></p>
+</form>
+</article></div></section>
+</main><div data-include="footer"></div><script src="/js/main.js" defer></script></body></html>
