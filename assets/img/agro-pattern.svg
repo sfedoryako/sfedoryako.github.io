@@ -1,0 +1,32 @@
+<svg width="700" height="700" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g stroke="#8A8A8A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.9">
+    <g transform="translate(40 70)">
+      <circle cx="50" cy="96" r="16"/>
+      <circle cx="132" cy="96" r="24"/>
+      <path d="M10 82H165M30 82V58H98L120 82M95 58V38H124V58"/>
+    </g>
+    <g transform="translate(330 90)">
+      <path d="M12 110H190M35 110V72H108L132 110M60 72V50H112"/>
+      <circle cx="54" cy="124" r="16"/>
+      <circle cx="144" cy="124" r="22"/>
+      <path d="M188 108L228 85M228 85L250 96M228 85V72"/>
+    </g>
+    <g transform="translate(90 290)">
+      <rect x="18" y="52" width="138" height="36" rx="6"/>
+      <circle cx="44" cy="96" r="16"/>
+      <circle cx="130" cy="96" r="22"/>
+      <path d="M0 70H18M156 70H204M204 70V112"/>
+    </g>
+    <g transform="translate(400 320)">
+      <path d="M80 16V126"/>
+      <circle cx="80" cy="12" r="8"/>
+      <path d="M80 42L42 90M80 42L118 90M42 90H118"/>
+      <rect x="124" y="82" width="52" height="36" rx="4"/>
+    </g>
+    <g transform="translate(250 500)">
+      <rect x="0" y="20" width="112" height="72" rx="8"/>
+      <rect x="12" y="34" width="88" height="40" rx="4"/>
+      <path d="M112 52H150M150 52L170 40M150 52L170 64"/>
+    </g>
+  </g>
+</svg>
