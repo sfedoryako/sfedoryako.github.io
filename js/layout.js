@@ -33,6 +33,25 @@ function bindMenuToggle() {
     button.setAttribute('aria-expanded', String(!expanded));
     nav.classList.toggle('is-open');
   });
+
+  nav.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      nav.classList.remove('is-open');
+      button.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
+
+function bindHeaderShrink() {
+  const header = document.querySelector('.site-header');
+  if (!header) return;
+
+  const onScroll = () => {
+    header.classList.toggle('is-shrink', window.scrollY > 24);
+  };
+
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
 }
 
 (async function initLayout() {
@@ -40,4 +59,5 @@ function bindMenuToggle() {
   await injectPartial('[data-include="footer"]', '/partials/footer.html');
   setActiveNav();
   bindMenuToggle();
+  bindHeaderShrink();
 })();

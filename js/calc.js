@@ -4,6 +4,7 @@
 
   const economyOutput = document.querySelector('#economy-output');
   const paybackOutput = document.querySelector('#payback-output');
+  const sendStatus = document.querySelector('#calc-send-status');
 
   const cropFactors = {
     wheat: 1,
@@ -12,7 +13,7 @@
     rapeseed: 1.32,
   };
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const area = Number(form.area.value);
@@ -30,5 +31,20 @@
 
     economyOutput.textContent = `${annualEconomy.toLocaleString('ru-RU')} ₽ / сезон`;
     paybackOutput.textContent = `${paybackMonths} мес.`;
+
+    const data = new FormData(form);
+    data.append('annualEconomy', String(annualEconomy));
+    data.append('paybackMonths', String(paybackMonths));
+
+    try {
+      await fetch(form.action, {
+        method: form.method,
+        body: data,
+        headers: { Accept: 'application/json' },
+      });
+      sendStatus.textContent = 'Данные отправлены. Мы подготовим детализированный расчёт.';
+    } catch (error) {
+      sendStatus.textContent = 'Не удалось отправить форму. Проверьте подключение или используйте телефон в разделе Контакты.';
+    }
   });
 })();
