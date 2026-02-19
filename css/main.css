@@ -161,6 +161,7 @@ p { margin: 0 0 12px; max-width: 76ch; }
 }
 .hero .container { position: relative; z-index: 2; }
 .hero h1, .hero .lead, .hero .hero-actions { opacity: 0; transform: translateY(16px); animation: fadeUp .8s ease forwards; }
+.hero h1 { color: #fff; }
 .hero .lead { animation-delay: .2s; color: #edf5ed; }
 .hero .hero-actions { animation-delay: .4s; margin-top: 8px; display: flex; flex-wrap: wrap; gap: 12px; }
 

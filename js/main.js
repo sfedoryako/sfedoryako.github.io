@@ -123,7 +123,7 @@ function initCalculator() {
   fertType.addEventListener('change', updateFields);
   updateFields();
 
-  const cropK = { wheat: 1, barley: 0.95, corn: 1.25, sunflower: 1.18, rapeseed: 1.28, soy: 1.08, sugarbeet: 1.34 };
+  const cropK = { wheat: 1, barley: 0.95, corn: 1.25, sunflower: 1.18, rapeseed: 1.28, soy: 1.08, sugarbeet: 1.34, pea: 1.02, oat: 0.9, rye: 0.92, flax: 1.12, rice: 1.3 };
   const opK = { sowing: 0.92, fertilizing: 1.14, spraying: 1.11 };
   const fertK = { nitrogen: 1.05, phosphorus: 1.02, potassium: 1.0, complex: 1.1, '': 1 };
 
@@ -152,7 +152,8 @@ function initCalculator() {
     const base = area * cropK[crop] * opK[operation] * Math.max(0.8, Math.min(1.3, capture / 12));
     const fertSaving = operation === 'fertilizing' ? base * appRate * 115 * fertK[fertilizer] : 0;
     const chemSaving = operation === 'spraying' ? base * 160 : 0;
-    const fuelSaving = base * 290;
+    const fuelPrice = Number(form.fuelPrice?.value || 68);
+    const fuelSaving = base * 4.3 * fuelPrice;
     const total = fertSaving + chemSaving + fuelSaving;
     const investment = 4200000;
     const roi = ((total - investment) / investment) * 100;
