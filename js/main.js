@@ -2,10 +2,7 @@ async function injectPartial(selector, path) {
   const target = document.querySelector(selector);
   if (!target) return;
   const response = await fetch(path);
-  if (!response.ok) {
-    target.innerHTML = '<p>Не удалось загрузить часть страницы.</p>';
-    return;
-  }
+  if (!response.ok) return;
   target.innerHTML = await response.text();
 }
 
@@ -13,17 +10,19 @@ function setActiveNav() {
   const current = document.body.dataset.page;
   document.querySelectorAll('.site-nav a').forEach((link) => {
     const href = link.getAttribute('href');
-    if ((current === 'home' && href === '/') || href === `/${current}/`) link.classList.add('active');
+    if ((current === 'about' && href === '/about/') || (current === 'catalog' && href === '/catalog/') || (current === 'contact' && href === '/contact/')) {
+      link.classList.add('active');
+    }
   });
 }
 
 function bindMenu() {
-  const button = document.querySelector('.menu-toggle');
+  const btn = document.querySelector('.menu-toggle');
   const nav = document.querySelector('.site-nav');
-  if (!button || !nav) return;
-  button.addEventListener('click', () => {
-    const isOpen = nav.classList.toggle('is-open');
-    button.setAttribute('aria-expanded', String(isOpen));
+  if (!btn || !nav) return;
+  btn.addEventListener('click', () => {
+    const open = nav.classList.toggle('is-open');
+    btn.setAttribute('aria-expanded', String(open));
   });
 }
 
@@ -35,14 +34,8 @@ function bindShrinkHeader() {
   window.addEventListener('scroll', handler, { passive: true });
 }
 
-function initRevealAnimations() {
+function initReveal() {
   const targets = document.querySelectorAll('.story, .card, .panel, .timeline article, .acc-item');
-  if (!targets.length) return;
-
-  targets.forEach((el) => {
-    if (!el.classList.contains('hero')) el.classList.add('reveal');
-  });
-
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
@@ -50,22 +43,24 @@ function initRevealAnimations() {
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.16 });
+  }, { threshold: 0.14 });
 
-  document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
-}
-
-function initAccordions() {
-  document.querySelectorAll('.acc-item').forEach((item) => {
-    const trigger = item.querySelector('.acc-trigger');
-    if (!trigger) return;
-    trigger.addEventListener('click', () => {
-      item.classList.toggle('open');
-    });
+  targets.forEach((el) => {
+    if (el.classList.contains('hero')) return;
+    el.classList.add('reveal');
+    observer.observe(el);
   });
 }
 
-function formatRub(value) {
+function initAccordion() {
+  document.querySelectorAll('.acc-item').forEach((item) => {
+    const trigger = item.querySelector('.acc-trigger');
+    if (!trigger) return;
+    trigger.addEventListener('click', () => item.classList.toggle('open'));
+  });
+}
+
+function money(value) {
   return `${Math.round(value).toLocaleString('ru-RU')} ₽`;
 }
 
@@ -73,64 +68,102 @@ function initCalculator() {
   const form = document.querySelector('#payback-form');
   if (!form) return;
 
-  const fields = {
-    area: form.querySelector('[name="area"]'),
-    crop: form.querySelector('[name="crop"]'),
-    operation: form.querySelector('[name="operation"]'),
-    capture: form.querySelector('[name="capture"]'),
-  };
+  const cropK = { wheat: 1, barley: 0.95, corn: 1.25, sunflower: 1.18, rapeseed: 1.28, soy: 1.08, sugarbeet: 1.34 };
+  const opK = { sowing: 0.92, fertilizing: 1.14, spraying: 1.11 };
+  const fertK = { nitrogen: 1.05, phosphorus: 1.02, potassium: 1.0, complex: 1.1, '': 1 };
 
   const out = {
-    chem: document.querySelector('#out-chem'),
     fert: document.querySelector('#out-fert'),
+    chem: document.querySelector('#out-chem'),
     fuel: document.querySelector('#out-fuel'),
     total: document.querySelector('#out-total'),
-    payback: document.querySelector('#out-payback'),
     roi: document.querySelector('#out-roi'),
+    payback: document.querySelector('#out-payback'),
   };
 
-  const cropK = { wheat: 1, corn: 1.24, sunflower: 1.18, rapeseed: 1.32 };
-  const opK = { sowing: 0.92, fertilizing: 1.1, spraying: 1.08 };
+  const calculate = () => {
+    const area = Number(form.area.value);
+    const capture = Number(form.capture.value);
+    const rate = Number(form.rate.value);
+    const crop = form.crop.value;
+    const operation = form.operation.value;
+    const fertType = form.fertType.value;
+    if (!area || !capture || !rate || !crop || !operation) return null;
+
+    const widthK = Math.max(0.8, Math.min(1.3, capture / 12));
+    const base = area * cropK[crop] * opK[operation] * widthK;
+
+    const fertSaving = operation === 'fertilizing' ? base * rate * 115 * fertK[fertType] : 0;
+    const chemSaving = operation === 'spraying' ? base * rate * 170 : 0;
+    const fuelSaving = base * 290;
+    const total = fertSaving + chemSaving + fuelSaving;
+    const investment = 4200000;
+    const roi = ((total - investment) / investment) * 100;
+    const payback = (investment / Math.max(total, 1)) * 12;
+
+    return { fertSaving, chemSaving, fuelSaving, total, roi, payback };
+  };
 
   form.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const area = Number(fields.area.value);
-    const crop = fields.crop.value;
-    const operation = fields.operation.value;
-    const capture = Number(fields.capture.value);
-
-    if (!area || !crop || !operation || !capture) {
+    const result = calculate();
+    if (!result) {
+      e.preventDefault();
       const status = form.querySelector('.form-status');
       if (status) {
-        status.textContent = 'Заполните все поля калькулятора.';
+        status.textContent = 'Заполните все обязательные поля калькулятора.';
         status.className = 'form-status error';
       }
       return;
     }
 
-    const widthCoeff = Math.max(0.85, Math.min(1.25, capture / 12));
-    const base = area * cropK[crop] * opK[operation] * widthCoeff;
+    out.fert.textContent = money(result.fertSaving);
+    out.chem.textContent = money(result.chemSaving);
+    out.fuel.textContent = money(result.fuelSaving);
+    out.total.textContent = money(result.total);
+    out.roi.textContent = `${result.roi.toFixed(1)} %`;
+    out.payback.textContent = `${result.payback.toFixed(1)} мес.`;
 
-    const chem = operation === 'spraying' ? base * 950 : 0;
-    const fert = operation === 'fertilizing' ? base * 1200 : 0;
-    const fuel = base * 320;
-    const total = chem + fert + fuel;
-    const investment = 4200000;
-    const payback = (investment / Math.max(total, 1)) * 12;
-    const roi = ((total - investment) / investment) * 100;
-
-    out.chem.textContent = formatRub(chem);
-    out.fert.textContent = formatRub(fert);
-    out.fuel.textContent = formatRub(fuel);
-    out.total.textContent = formatRub(total);
-    out.payback.textContent = `${payback.toFixed(1)} мес.`;
-    out.roi.textContent = `${roi.toFixed(1)} %`;
-
-    form.querySelector('[name="calc_total"]').value = Math.round(total);
-    form.querySelector('[name="calc_payback"]').value = payback.toFixed(1);
-    form.querySelector('[name="calc_roi"]').value = roi.toFixed(1);
+    form.querySelector('[name="calc_total"]').value = Math.round(result.total);
+    form.querySelector('[name="calc_roi"]').value = result.roi.toFixed(1);
+    form.querySelector('[name="calc_payback"]').value = result.payback.toFixed(1);
   });
+}
+
+function initQuiz() {
+  const form = document.querySelector('#quiz-form');
+  if (!form) return;
+
+  const steps = Array.from(form.querySelectorAll('.quiz-step'));
+  const prevBtn = form.querySelector('#quiz-prev');
+  const nextBtn = form.querySelector('#quiz-next');
+  const submitBtn = form.querySelector('#quiz-submit');
+  const bar = form.querySelector('#quiz-progress-bar');
+  let index = 0;
+
+  const render = () => {
+    steps.forEach((s, i) => s.classList.toggle('active', i === index));
+    bar.style.width = `${((index + 1) / steps.length) * 100}%`;
+    prevBtn.style.display = index === 0 ? 'none' : 'inline-flex';
+    nextBtn.style.display = index === steps.length - 1 ? 'none' : 'inline-flex';
+    submitBtn.style.display = index === steps.length - 1 ? 'inline-flex' : 'none';
+  };
+
+  prevBtn.addEventListener('click', () => {
+    index = Math.max(0, index - 1);
+    render();
+  });
+
+  nextBtn.addEventListener('click', () => {
+    const activeInput = steps[index].querySelector('input, select, textarea');
+    if (activeInput && !activeInput.checkValidity()) {
+      activeInput.reportValidity();
+      return;
+    }
+    index = Math.min(steps.length - 1, index + 1);
+    render();
+  });
+
+  render();
 }
 
 function initAjaxForms() {
@@ -141,27 +174,22 @@ function initAjaxForms() {
         form.reportValidity();
         return;
       }
-
       const status = form.querySelector('.form-status');
-      const data = new FormData(form);
-
       try {
         const response = await fetch(form.action, {
           method: form.method || 'POST',
-          body: data,
+          body: new FormData(form),
           headers: { Accept: 'application/json' },
         });
-
-        if (!response.ok) throw new Error('Formspree error');
-
+        if (!response.ok) throw new Error('send error');
         if (status) {
-          status.textContent = 'Спасибо! Форма отправлена. Мы свяжемся с вами в рабочее время.';
+          status.textContent = 'Форма отправлена. Мы свяжемся с вами в рабочее время.';
           status.className = 'form-status success';
         }
         form.reset();
-      } catch (error) {
+      } catch {
         if (status) {
-          status.textContent = 'Ошибка отправки. Проверьте endpoint Formspree или подключение.';
+          status.textContent = 'Ошибка отправки. Проверьте Formspree endpoint.';
           status.className = 'form-status error';
         }
       }
@@ -169,14 +197,15 @@ function initAjaxForms() {
   });
 }
 
-(async function initSite() {
+(async function init() {
   await injectPartial('[data-include="header"]', '/partials/header.html');
   await injectPartial('[data-include="footer"]', '/partials/footer.html');
   setActiveNav();
   bindMenu();
   bindShrinkHeader();
-  initRevealAnimations();
-  initAccordions();
+  initReveal();
+  initAccordion();
   initCalculator();
+  initQuiz();
   initAjaxForms();
 })();
